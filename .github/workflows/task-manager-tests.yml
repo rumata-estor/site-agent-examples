@@ -1,0 +1,43 @@
+name: Component tests
+
+on:
+  push:
+    paths:
+      - 'siteagent/tasks.py'
+      - 'siteagent/changesets.py'
+      - 'siteagent/state_guard.py'
+      - 'tests/test_changesets.py'
+      - 'tests/test_state_guard.py'
+      - 'tests/test_tasks.py'
+      - 'tests/_runtime_stubs.py'
+      - 'tests/__init__.py'
+      - '.github/workflows/task-manager-tests.yml'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    name: Test with Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run component tests
+        run: python -m unittest discover -s tests -v
+      - name: Run each test module independently
+        shell: bash
+        run: |
+          for module in test_tasks test_changesets test_state_guard; do
+            python -m unittest "tests.$module" -v
+          done

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Three interactive Site Agent Runtime demos: task management, change control, and protection against stale data. Real Python runs in your browser.">
+<title>Try Site Agent Runtime — three interactive demos</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#23364b;background:#f5f7f9;font-size:16px;color-scheme:light}
+*{box-sizing:border-box}body{margin:0}a{color:#295c84;text-underline-offset:3px}a:hover{color:#173d61}button,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #8baed0;outline-offset:3px}
+.wrap{max-width:1050px;margin:0 auto;padding:48px 28px 70px}.eyebrow{font-size:12px;letter-spacing:.105em;text-transform:uppercase;font-weight:750;color:#58738f;margin:0 0 12px}.hero{margin:0 0 32px}.hero h1{font-size:clamp(32px,5vw,49px);line-height:1.14;letter-spacing:-.04em;margin:0 0 14px;max-width:860px}.lead{font-size:17px;line-height:1.7;color:#52657a;max-width:790px;margin:0 0 18px}.meta{display:flex;flex-wrap:wrap;gap:18px;font-size:13px}
+.how{display:flex;align-items:center;gap:12px;background:#eaf2f8;border:1px solid #d2e0ec;border-radius:12px;padding:14px 17px;margin-bottom:24px;line-height:1.5;font-size:14px;color:#365675}.how strong{white-space:nowrap;color:#28557d}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}.tabs button{border:1px solid #d6e0ea;background:#fff;color:#344f69;border-radius:11px;padding:16px 15px;min-height:76px;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:5px;line-height:1.2;font-weight:750;font-size:15px}.tabs button small{font-weight:500;font-size:12px;color:#718295}.tabs button[aria-selected="true"]{background:#284e73;color:#fff;border-color:#284e73}.tabs button[aria-selected="true"] small{color:#d4e3f0}
+.tab-panel[hidden]{display:none!important}.demo{background:#fff;border:1px solid #dde5ed;border-radius:15px;padding:27px 28px 30px;box-shadow:0 3px 16px rgba(29,50,71,.035)}.demo h2{font-size:clamp(23px,3vw,29px);letter-spacing:-.025em;line-height:1.27;margin:0 0 9px}.demo .intro{font-size:15px;line-height:1.65;color:#56697c;margin:0 0 23px;max-width:800px}.scene{border:1px solid #dbe5ed;background:#f2f6fa;border-radius:11px;padding:20px 22px;margin-bottom:25px;display:grid;grid-template-columns:auto 1fr;gap:7px 15px;align-items:center}.scene-label{font-size:13px;font-weight:700;color:#61778b}.scene-value{font-size:17px;font-weight:750;overflow-wrap:anywhere;color:#29475f}.scene-note{grid-column:1/-1;margin:7px 0 0;font-size:13px;line-height:1.6;color:#697c8e}.scene-status{display:inline-flex;gap:8px;align-items:center}.scene-status::before{content:"";width:9px;height:9px;background:#9aaebd;border-radius:50%;flex:none}.scene-status.live::before{background:#248966}.scene-status.stopped::before{background:#b86c49}
+.status{font-size:13px;color:#647b8e;margin-bottom:14px;min-height:20px}.status.error{color:#ad463c}.status.ready{color:#257451}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-bottom:20px}.step{min-width:0}.step-button{width:100%;min-height:92px;text-align:left;display:flex;gap:11px;align-items:center;padding:14px 13px;border-radius:11px;border:1px solid #c9d9e6;background:#edf4fa;color:#2b5276;font-size:14px;font-weight:740;line-height:1.45}.step-button:hover:not(:disabled){background:#dfebf5;border-color:#89a8c4}.step-button:disabled{opacity:.55;cursor:default}.step-button.current:not(:disabled){background:#285b86;border-color:#285b86;color:#fff;box-shadow:0 4px 11px rgba(33,86,130,.12)}.num{width:31px;height:31px;flex:0 0 31px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center;font-weight:800;font-size:13px;opacity:.85}.step-result{display:block;padding:10px 3px 0;font-size:13px;line-height:1.5;color:#728194;min-height:53px}.step-result.ok{color:#24734e;font-weight:650}.step-result.ok::before{content:'✓ ';font-weight:850}.step-result.blocked{color:#a13532;background:#fff0ed;border-left:3px solid #c64c46;border-radius:4px;padding:8px 10px;margin-top:7px;font-weight:750}.step-result.blocked::before{content:'⛔ ';font-weight:850}.step-result.fail{color:#aa493e;font-weight:650}.step-result.fail::before{content:'! '}
+.result{border-radius:10px;border:1px solid #dfe6ed;background:#f6f8fa;padding:15px 18px;line-height:1.55;min-height:76px}.result strong{display:block;font-size:15px;margin:0 0 4px}.result p{margin:0;font-size:14px;color:#5a6c7c}.result.pass{background:#eaf6ef;border-color:#bee1cd}.result.pass strong{color:#216b45}.result.blocked{background:#fff0ed;border:1px solid #e4b1a9;border-left:4px solid #c64c46}.result.blocked strong{color:#a13532}.result.fail{background:#fff1ef;border-color:#ecc8c1}.result.fail strong{color:#a34c3e}
+.bottom{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;margin-top:17px}.restart{display:inline-flex;align-items:center;justify-content:center;min-height:53px;background:#e7f0f8;border:2px solid #94b1cb;border-radius:10px;padding:12px 23px;font-size:16px;font-weight:750;color:#244f75;text-decoration:none;transition:background .12s,border-color .12s}.restart:hover:not(:disabled){background:#d7e8f5;border-color:#4d80aa;color:#193e61}.restart:disabled{opacity:.58;cursor:default}.sources{font-size:13px;color:#7a8998;display:flex;flex-wrap:wrap;gap:12px}.footnote{font-size:13px;color:#617388;line-height:1.65;margin:20px 2px 0;max-width:900px}
+@media(max-width:760px){.wrap{padding:24px 14px 42px}.hero{margin-bottom:23px}.lead{font-size:15px}.how{display:block}.how strong{display:block;margin-bottom:3px}.tabs{grid-template-columns:1fr;gap:7px}.tabs button{min-height:55px;padding:11px 14px;gap:3px}.demo{padding:19px 16px 21px}.scene{padding:14px 15px;grid-template-columns:1fr;gap:4px}.scene-value{font-size:16px}.steps{grid-template-columns:1fr;gap:9px}.step-button{min-height:57px;padding:10px 13px}.step-result{min-height:0;padding:6px 3px 1px}.bottom{align-items:flex-start}.footnote{margin-top:16px}}
+
+/* Keep the interaction visible without introductory scrolling. */
+.wrap{max-width:990px;padding-top:25px}.hero{margin-bottom:18px}.hero h1{font-size:clamp(29px,4.1vw,40px);margin-bottom:8px;max-width:100%}.lead{font-size:18px;line-height:1.55;max-width:790px;margin-bottom:0}.eyebrow{margin-bottom:8px}
+.tabs{margin-bottom:11px;gap:8px}.tabs button{min-height:63px;padding:12px 13px}.demo{padding:23px 25px}.demo .intro{margin-bottom:17px;font-size:14px}.demo h2{font-size:24px}.scene{padding:15px 18px;margin-bottom:17px}.status{margin-bottom:10px}.step-button{min-height:75px}
+@media(max-width:760px){.wrap{padding:19px 14px 36px}.hero{margin-bottom:16px}.hero h1{font-size:30px;line-height:1.15}.lead{font-size:16px;line-height:1.55}.tabs{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.tabs button{min-height:54px;padding:8px 8px;font-size:12px;text-align:center;align-items:center}.tabs button small{font-size:10px}.demo{padding:17px 14px 20px}.demo h2{font-size:21px;margin-bottom:6px}.demo .intro{font-size:13px;margin-bottom:12px}.scene{padding:12px 14px;margin-bottom:12px}.scene-label{font-size:12px}.scene-value{font-size:15px}.scene-note{margin-top:3px;font-size:12px}.step-button{min-height:53px}.footnote{font-size:12px}}
+@media(max-width:760px){.bottom{flex-direction:column;align-items:stretch;gap:13px}.restart{width:100%;font-size:16px;min-height:56px}.sources{justify-content:center}}
+.language-switch{display:flex;justify-content:flex-end;align-items:center;gap:9px;margin:0 0 12px;font-size:13px;color:#657b90}.language-switch a[aria-current="page"]{font-weight:750;color:#244f75;text-decoration:none}
+</style>
+</head>
+<body><main class="wrap">
+<nav class="language-switch" aria-label="Page language"><a data-language-link href="./index.html" lang="ru">Русский</a><span aria-hidden="true">|</span><a data-language-link href="./index.en.html" lang="en" aria-current="page">English</a></nav>
+
+<header class="hero"><p class="eyebrow">Site Agent Runtime · Interactive demo</p><h1>See how an agent prevents mistakes</h1>
+<p class="lead">Choose a tab, press buttons 1, 2, and 3, and see what happens. Real Python code runs in the browser. No installation required.</p>
+</header>
+<nav class="tabs" role="tablist" aria-label="Choose a demo">
+<button type="button" role="tab" id="tab-task" aria-controls="task-panel" aria-selected="true" tabindex="0">01 · Tasks <small>Task Manager</small></button>
+<button type="button" role="tab" id="tab-changeset" aria-controls="changeset-panel" aria-selected="false" tabindex="-1">02 · Changes <small>ChangeSet</small></button>
+<button type="button" role="tab" id="tab-state" aria-controls="state-panel" aria-selected="false" tabindex="-1">03 · Conflicts <small>State Guard</small></button>
+</nav>
+<section id="task-panel" class="tab-panel demo" role="tabpanel" aria-labelledby="tab-task">
+<h2>Can two tasks run at the same time?</h2><p class="intro">The system must block a conflicting task while allowing the first one to finish. Try it yourself.</p>
+<div class="scene" aria-live="polite"><span class="scene-label">Task</span><span class="scene-value">“Update a website page”</span><span class="scene-label">Status</span><span id="task-state" class="scene-value scene-status">Not started</span><p class="scene-note" id="task-note">Start with the first button.</p></div>
+<div id="task-loading" class="status" role="status">Loading Python…</div>
+<div class="steps">
+<div class="step"><button type="button" class="step-button" id="task-1" disabled><span class="num">1</span>Start the task</button><span class="step-result" id="task-step-1">Not tested yet</span></div>
+<div class="step"><button type="button" class="step-button" id="task-2" disabled><span class="num">2</span>Start a second task</button><span class="step-result" id="task-step-2">Not tested yet</span></div>
+<div class="step"><button type="button" class="step-button" id="task-3" disabled><span class="num">3</span>Complete the first task</button><span class="step-result" id="task-step-3">Not tested yet</span></div>
+</div><div class="result" id="task-result" aria-live="polite"><strong>Demo not started</strong><p>Click “Start the task”.</p></div>
+<div class="bottom"><button class="restart" id="task-reset" type="button">↻ Start over</button><div class="sources"><a href="https://github.com/rumata-estor/site-agent-examples/blob/main/siteagent/tasks.py">Task Manager source ↗</a></div></div>
+</section>
+<section id="changeset-panel" class="tab-panel demo" role="tabpanel" aria-labelledby="tab-changeset" hidden>
+<h2>Can an agent make a risky change without approval?</h2><p class="intro">First, validate a regular plan. Then increase the risk and try to bypass required approval.</p>
+<div class="scene" aria-live="polite"><span class="scene-label">Change</span><span class="scene-value">“Change the page text”</span><span class="scene-label">Plan status</span><span id="change-state" class="scene-value scene-status">No plan</span><p id="change-note" class="scene-note">No real websites are modified.</p></div>
+<div id="change-loading" class="status" role="status">Open this tab to load Python.</div>
+<div class="steps">
+<div class="step"><button type="button" class="step-button" id="change-1" disabled><span class="num">1</span>Validate a regular plan</button><span class="step-result" id="change-step-1">Not tested yet</span></div>
+<div class="step"><button type="button" class="step-button" id="change-2" disabled><span class="num">2</span>Try a risky change</button><span class="step-result" id="change-step-2">Not tested yet</span></div>
+<div class="step"><button type="button" class="step-button" id="change-3" disabled><span class="num">3</span>Approve without authorization</button><span class="step-result" id="change-step-3">Not tested yet</span></div>
+</div><div class="result" id="change-result" aria-live="polite"><strong>Demo not started</strong><p>Click “Validate a regular plan”.</p></div>
+<div class="bottom"><button class="restart" id="change-reset" type="button">↻ Start over</button><div class="sources"><a href="https://github.com/rumata-estor/site-agent-examples/blob/main/siteagent/changesets.py">ChangeSet source ↗</a></div></div>
+</section>
+<section id="state-panel" class="tab-panel demo" role="tabpanel" aria-labelledby="tab-state" hidden>
+<h2>Can stale data overwrite a newer change?</h2><p class="intro">Two simulated agents read the same text. The first changes it. See what happens when the second tries to save an outdated version.</p>
+<div class="scene" aria-live="polite"><span class="scene-label">Page text</span><span id="state-text" class="scene-value">“Original page text”</span><span class="scene-label">What agent B saw</span><span id="state-observed" class="scene-value">Not read yet</span><p class="scene-note" id="state-note">A test store compares version fingerprints, while State Guard records the conflict.</p></div>
+<div id="state-loading" class="status" role="status">Open this tab to load Python.</div>
+<div class="steps">
+<div class="step"><button type="button" class="step-button" id="state-1" disabled><span class="num">1</span>Both agents read the text</button><span class="step-result" id="state-step-1">Not tested yet</span></div>
+<div class="step"><button type="button" class="step-button" id="state-2" disabled><span class="num">2</span>Agent A changes the text</button><span class="step-result" id="state-step-2">Not tested yet</span></div>
+<div class="step"><button type="button" class="step-button" id="state-3" disabled><span class="num">3</span>Agent B saves an outdated version</button><span class="step-result" id="state-step-3">Not tested yet</span></div>
+</div><div class="result" id="state-result" aria-live="polite"><strong>Demo not started</strong><p>Click “Both agents read the text”.</p></div>
+<div class="bottom"><button class="restart" id="state-reset" type="button">↻ Start over</button><div class="sources"><a href="https://github.com/rumata-estor/site-agent-examples/blob/main/siteagent/state_guard.py">State Guard source ↗</a></div></div>
+</section>
+<p class="footnote"><a href="https://github.com/rumata-estor/site-agent-examples/blob/main/README.en.md">Public GitHub repository ↗</a> · <a href="https://github.com/rumata-estor/site-agent-examples/actions">Automated tests ↗</a></p>
+<p class="footnote">These are isolated demos with no access to live websites. Published Python modules run in the browser with test dependencies. File locks across independent processes and other low-level mechanisms are verified separately by <a href="https://github.com/rumata-estor/site-agent-examples/actions">GitHub Actions tests</a>.</p>
+</main><script src="./tabs.js" defer></script><script src="./simple.en.js" defer></script></body></html>
